@@ -14,7 +14,7 @@ permissions:
 env:
   NAMESPACE: beancs-system
   APP: basaltpass
-  IMAGE_PLATFORMS: ${{ vars.BASALTPASS_IMAGE_PLATFORMS || 'linux/arm64' }}
+  IMAGE_PLATFORMS: ${{ vars.BASALTPASS_IMAGE_PLATFORMS || 'linux/amd64' }}
 
 jobs:
   test:
@@ -37,7 +37,7 @@ jobs:
 
   build_and_push:
     needs: test
-    runs-on: ${{ vars.BASALTPASS_BUILD_RUNNER || 'ubuntu-24.04-arm' }}
+    runs-on: ubuntu-latest
     outputs:
       backend_image: ${{ steps.meta.outputs.backend_image }}
       frontend_image: ${{ steps.meta.outputs.frontend_image }}
@@ -198,7 +198,7 @@ jobs:
                   beancs.io/deploy-run: "${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
               spec:
                 nodeSelector:
-                  kubernetes.io/arch: arm64
+                  kubernetes.io/arch: amd64
                 imagePullSecrets:
                   - name: ghcr-creds
                 containers:
@@ -287,7 +287,7 @@ jobs:
                   beancs.io/deploy-run: "${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
               spec:
                 nodeSelector:
-                  kubernetes.io/arch: arm64
+                  kubernetes.io/arch: amd64
                 imagePullSecrets:
                   - name: ghcr-creds
                 containers:
