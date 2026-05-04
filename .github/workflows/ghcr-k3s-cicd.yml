@@ -37,7 +37,7 @@ jobs:
 
   build_and_push:
     needs: test
-    runs-on: ${{ vars.BASALTPASS_BUILD_RUNNER || 'ubuntu-24.04-arm' }}
+    runs-on: ubuntu-latest
     outputs:
       backend_image: ${{ steps.meta.outputs.backend_image }}
       frontend_image: ${{ steps.meta.outputs.frontend_image }}
