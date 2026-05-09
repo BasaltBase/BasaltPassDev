@@ -97,6 +97,20 @@ func RegisterAdminRoutes(v1 fiber.Router) {
 	adminTenantGroup.Delete("/:id", adminTenant.DeleteTenantHandler)  // /tenant/tenants/:id
 	adminTenantGroup.Get("/:id/auth-settings", adminTenant.GetTenantAuthSettingsHandler)
 	adminTenantGroup.Put("/:id/auth-settings", adminTenant.UpdateTenantAuthSettingsHandler)
+	adminTenantGroup.Get("/:id/rbac/roles", adminTenant.AdminListTenantRbacRoles)
+	adminTenantGroup.Post("/:id/rbac/roles", adminTenant.AdminCreateTenantRbacRole)
+	adminTenantGroup.Put("/:id/rbac/roles/:roleId", adminTenant.AdminUpdateTenantRbacRole)
+	adminTenantGroup.Delete("/:id/rbac/roles/:roleId", adminTenant.AdminDeleteTenantRbacRole)
+	adminTenantGroup.Get("/:id/rbac/roles/:roleId/permissions", adminTenant.AdminGetTenantRbacRolePermissions)
+	adminTenantGroup.Post("/:id/rbac/roles/:roleId/permissions", adminTenant.AdminSetTenantRbacRolePermissions)
+	adminTenantGroup.Get("/:id/rbac/permissions", adminTenant.AdminListTenantRbacPermissions)
+	adminTenantGroup.Post("/:id/rbac/permissions", adminTenant.AdminCreateTenantRbacPermission)
+	adminTenantGroup.Put("/:id/rbac/permissions/:permissionId", adminTenant.AdminUpdateTenantRbacPermission)
+	adminTenantGroup.Delete("/:id/rbac/permissions/:permissionId", adminTenant.AdminDeleteTenantRbacPermission)
+	adminTenantGroup.Get("/:id/rbac/permission-categories", adminTenant.AdminListTenantRbacPermissionCategories)
+	adminTenantGroup.Get("/:id/rbac/users", adminTenant.AdminListTenantRbacUsers)
+	adminTenantGroup.Get("/:id/rbac/users/:userId/access", adminTenant.AdminGetTenantRbacUserAccess)
+	adminTenantGroup.Put("/:id/rbac/users/:userId/access", adminTenant.AdminSetTenantRbacUserAccess)
 
 	// alias: /api/v1/admin/tenants 与 /api/v1/tenant/tenants 对齐
 	aliasTenantGroup := adminAliasGroup.Group("/tenants")
@@ -108,6 +122,20 @@ func RegisterAdminRoutes(v1 fiber.Router) {
 	aliasTenantGroup.Delete("/:id", adminTenant.DeleteTenantHandler)
 	aliasTenantGroup.Get("/:id/auth-settings", adminTenant.GetTenantAuthSettingsHandler)
 	aliasTenantGroup.Put("/:id/auth-settings", adminTenant.UpdateTenantAuthSettingsHandler)
+	aliasTenantGroup.Get("/:id/rbac/roles", adminTenant.AdminListTenantRbacRoles)
+	aliasTenantGroup.Post("/:id/rbac/roles", adminTenant.AdminCreateTenantRbacRole)
+	aliasTenantGroup.Put("/:id/rbac/roles/:roleId", adminTenant.AdminUpdateTenantRbacRole)
+	aliasTenantGroup.Delete("/:id/rbac/roles/:roleId", adminTenant.AdminDeleteTenantRbacRole)
+	aliasTenantGroup.Get("/:id/rbac/roles/:roleId/permissions", adminTenant.AdminGetTenantRbacRolePermissions)
+	aliasTenantGroup.Post("/:id/rbac/roles/:roleId/permissions", adminTenant.AdminSetTenantRbacRolePermissions)
+	aliasTenantGroup.Get("/:id/rbac/permissions", adminTenant.AdminListTenantRbacPermissions)
+	aliasTenantGroup.Post("/:id/rbac/permissions", adminTenant.AdminCreateTenantRbacPermission)
+	aliasTenantGroup.Put("/:id/rbac/permissions/:permissionId", adminTenant.AdminUpdateTenantRbacPermission)
+	aliasTenantGroup.Delete("/:id/rbac/permissions/:permissionId", adminTenant.AdminDeleteTenantRbacPermission)
+	aliasTenantGroup.Get("/:id/rbac/permission-categories", adminTenant.AdminListTenantRbacPermissionCategories)
+	aliasTenantGroup.Get("/:id/rbac/users", adminTenant.AdminListTenantRbacUsers)
+	aliasTenantGroup.Get("/:id/rbac/users/:userId/access", adminTenant.AdminGetTenantRbacUserAccess)
+	aliasTenantGroup.Put("/:id/rbac/users/:userId/access", adminTenant.AdminSetTenantRbacUserAccess)
 
 	// 租户用户管理
 	adminTenantGroup.Get("/:id/users", adminTenant.GetTenantUsersHandler)              // /tenant/tenants/:id/users

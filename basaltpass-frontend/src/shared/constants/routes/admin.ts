@@ -7,6 +7,8 @@ export const ADMIN_ROUTES = {
   invitations: '/admin/invitations',
   tenants: '/admin/tenants',
   tenantsCreate: '/admin/tenants/create',
+  tenantRbac: '/admin/tenant-rbac',
+  tenantRbacFor: (id: number | string) => `/admin/tenants/${id}/rbac`,
   oauthClients: '/admin/oauth-clients',
   apps: '/admin/apps',
   appsCreate: '/admin/apps/create',

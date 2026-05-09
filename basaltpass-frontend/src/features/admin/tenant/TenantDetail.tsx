@@ -13,7 +13,8 @@ import {
   PencilIcon,
   TrashIcon,
   ChartBarIcon,
-  CubeIcon
+  CubeIcon,
+  KeyIcon
 } from '@heroicons/react/24/outline'
 import AdminLayout from '@features/admin/components/AdminLayout'
 import { PInput, PSelect, PTextarea, PCheckbox, PButton, PSkeleton, PBadge, PAlert, PCard, PPageHeader } from '@ui'
@@ -312,6 +313,16 @@ const TenantDetail: React.FC = () => {
             </div>
           </div>
           <div className="mt-5 flex lg:mt-0 lg:ml-4 space-x-3">
+            <PButton
+              onClick={() => navigate(ROUTES.admin.tenantRbacFor(tenant.id))}
+              disabled={updating}
+              variant="secondary"
+            >
+              <span className="inline-flex items-center">
+                <KeyIcon className="h-4 w-4 mr-2" />
+                Tenant RBAC
+              </span>
+            </PButton>
             <PButton
               onClick={() => setEditMode(!editMode)}
               disabled={updating}

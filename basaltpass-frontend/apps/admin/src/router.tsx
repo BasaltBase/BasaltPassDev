@@ -29,6 +29,7 @@ import CreateTenant from '../../../src/features/admin/tenant/CreateTenant'
 import TenantDetail from '../../../src/features/admin/tenant/TenantDetail'
 import EditTenant from '../../../src/features/admin/tenant/EditTenant'
 import TenantUsers from '../../../src/features/admin/tenant/TenantUsers'
+import TenantRbac from '../../../src/features/admin/tenant/TenantRbac'
 
 import AppList from '../../../src/features/admin/app/AppList'
 import CreateApp from '../../../src/features/admin/app/CreateApp'
@@ -114,6 +115,8 @@ export default function AppRouter() {
       <Route path="/admin/tenants/:id" element={<AdminRoute><TenantDetail /></AdminRoute>} />
       <Route path="/admin/tenants/:id/edit" element={<AdminRoute><EditTenant /></AdminRoute>} />
       <Route path="/admin/tenants/:id/users" element={<AdminRoute><TenantUsers /></AdminRoute>} />
+      <Route path="/admin/tenants/:id/rbac" element={<AdminRoute><TenantRbac /></AdminRoute>} />
+      <Route path="/admin/tenant-rbac" element={<AdminRoute><TenantRbac /></AdminRoute>} />
 
       <Route path="/admin/apps" element={<AdminRoute><AppList /></AdminRoute>} />
       <Route path="/admin/apps/create" element={<AdminRoute><CreateApp /></AdminRoute>} />

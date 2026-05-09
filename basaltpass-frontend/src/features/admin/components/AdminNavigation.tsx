@@ -49,20 +49,12 @@ const navigationItems: NavigationItem[] = [
       { key: 'adminNav.userList', href: ROUTES.admin.users, icon: UsersIcon },
     ]
   },
-    {
+  {
     key: 'adminNav.collaboration',
     icon: UsersIcon,
     children: [
       { key: 'adminNav.teams', href: ROUTES.admin.teams, icon: UsersIcon },
       { key: 'adminNav.invitations', href: ROUTES.admin.invitations, icon: UserGroupIcon },
-    ]
-  },
-  {
-    key: 'adminNav.tenantManagement',
-    icon: BuildingOfficeIcon,
-    children: [
-      { key: 'adminNav.tenantList', href: ROUTES.admin.tenants, icon: BuildingOfficeIcon },
-      { key: 'adminNav.createTenant', href: ROUTES.admin.tenantsCreate, icon: BuildingOfficeIcon },
     ]
   },
   {
@@ -91,6 +83,15 @@ const navigationItems: NavigationItem[] = [
     requiresMarket: true,
     children: [
       { key: 'adminNav.walletOverview', href: ROUTES.admin.wallets, icon: WalletIcon },
+    ]
+  },
+  {
+    key: 'adminNav.tenantManagement',
+    icon: BuildingOfficeIcon,
+    children: [
+      { key: 'adminNav.tenantList', href: ROUTES.admin.tenants, icon: BuildingOfficeIcon },
+      { key: 'adminNav.createTenant', href: ROUTES.admin.tenantsCreate, icon: BuildingOfficeIcon },
+      { key: 'adminNav.tenantRbac', href: ROUTES.admin.tenantRbac, icon: KeyIcon },
     ]
   },
   {
