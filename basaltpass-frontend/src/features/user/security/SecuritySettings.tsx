@@ -102,10 +102,10 @@ export default function SecuritySettings() {
   }
 
   const getSecurityLevel = (score: number) => {
-    if (score >= 90) return { text: t('pages.userSecuritySettings.securityLevel.veryStrong'), color: 'text-green-600', bg: 'bg-green-100' }
-    if (score >= 70) return { text: t('pages.userSecuritySettings.securityLevel.strong'), color: 'text-blue-600', bg: 'bg-blue-100' }
-    if (score >= 50) return { text: t('pages.userSecuritySettings.securityLevel.medium'), color: 'text-yellow-600', bg: 'bg-yellow-100' }
-    return { text: t('pages.userSecuritySettings.securityLevel.weak'), color: 'text-red-600', bg: 'bg-red-100' }
+    if (score >= 90) return { text: t('pages.userSecuritySettings.securityLevel.veryStrong'), color: 'text-green-600', bg: 'bg-green-100', bar: 'bg-green-500' }
+    if (score >= 70) return { text: t('pages.userSecuritySettings.securityLevel.strong'), color: 'text-blue-600', bg: 'bg-blue-100', bar: 'bg-blue-500' }
+    if (score >= 50) return { text: t('pages.userSecuritySettings.securityLevel.medium'), color: 'text-yellow-600', bg: 'bg-yellow-100', bar: 'bg-yellow-500' }
+    return { text: t('pages.userSecuritySettings.securityLevel.weak'), color: 'text-red-600', bg: 'bg-red-100', bar: 'bg-red-500' }
   }
 
   const handlePasswordChange = async (e: React.FormEvent) => {
@@ -238,7 +238,7 @@ export default function SecuritySettings() {
               <div className="mt-4">
                 <div className="bg-gray-200 rounded-full h-2">
                   <div 
-                    className="bg-gradient-to-r from-red-500 via-yellow-500 to-green-500 h-2 rounded-full transition-all duration-300"
+                    className={`${securityLevel.bar} h-2 rounded-full transition-all duration-300`}
                     style={{ width: `${securityScore}%` }}
                   ></div>
                 </div>

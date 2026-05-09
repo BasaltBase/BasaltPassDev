@@ -137,7 +137,8 @@ const EnhancedNotificationIcon: React.FC<EnhancedNotificationIconProps> = ({
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative rounded-lg p-2 text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        className="relative flex h-11 w-11 items-center justify-center rounded-lg p-0 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:text-gray-300 dark:hover:bg-white/10 dark:hover:text-white"
+        aria-label="View notifications"
       >
         {unreadCount > 0 ? (
           <BellIconSolid className="h-6 w-6" />
