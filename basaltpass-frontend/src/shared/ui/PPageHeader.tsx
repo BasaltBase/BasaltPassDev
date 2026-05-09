@@ -39,7 +39,7 @@ const PPageHeader: React.FC<PPageHeaderProps> = ({
           {backTo ? (
             <Link
               to={backTo}
-              className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 transition-colors"
+              className="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
             >
               <ChevronLeftIcon className="h-4 w-4 mr-1" />
               {backLabel}
@@ -48,7 +48,7 @@ const PPageHeader: React.FC<PPageHeaderProps> = ({
             <button
               type="button"
               onClick={onBack}
-              className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 transition-colors"
+              className="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
             >
               <ChevronLeftIcon className="h-4 w-4 mr-1" />
               {backLabel}
@@ -59,16 +59,16 @@ const PPageHeader: React.FC<PPageHeaderProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3 min-w-0">
           {icon && (
-            <div className="flex-shrink-0 text-gray-600">
+            <div className="flex-shrink-0 text-gray-600 dark:text-gray-300">
               {icon}
             </div>
           )}
           <div className="min-w-0">
-            <h1 className="text-2xl font-bold text-gray-900 truncate">
+            <h1 className="text-2xl font-bold text-gray-900 truncate dark:text-gray-50">
               {title}
             </h1>
             {description && (
-              <p className="mt-1 text-sm text-gray-500">{description}</p>
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{description}</p>
             )}
           </div>
         </div>

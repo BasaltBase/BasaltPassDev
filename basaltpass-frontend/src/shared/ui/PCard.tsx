@@ -42,9 +42,9 @@ const PCard = forwardRef<HTMLDivElement, PCardProps>(
     
     // translatedstyle
     const variantClasses = {
-      default: 'bg-white shadow-sm',
-      bordered: 'bg-white border border-gray-200 shadow-sm',
-      elevated: 'bg-white shadow-md'
+      default: 'bg-white shadow-sm dark:bg-gray-900 dark:text-gray-100 dark:shadow-none dark:ring-1 dark:ring-white/10',
+      bordered: 'bg-white border border-gray-200 shadow-sm dark:border-white/10 dark:bg-gray-900 dark:text-gray-100 dark:shadow-none',
+      elevated: 'bg-white shadow-md dark:bg-gray-900 dark:text-gray-100 dark:shadow-none dark:ring-1 dark:ring-white/10'
     }
     
     // translatedstyle（translatedhastranslated padding translated）

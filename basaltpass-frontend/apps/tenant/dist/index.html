@@ -10,7 +10,7 @@
         var envApiBase = 'http://localhost:8101'
         var apiBase = envApiBase && envApiBase !== 'http://localhost:8101'
           ? envApiBase
-          : window.location.protocol + '//' + window.location.hostname + ':8101'
+          : window.location.origin
 
         fetch(String(apiBase).replace(/\/$/, '') + '/api/v1/config', { credentials: 'include' })
           .then(function (response) {
@@ -25,8 +25,8 @@
           .catch(function () {})
       })()
     </script>
-    <script type="module" crossorigin src="/tenant/assets/index-B2N0oEje.js"></script>
-    <link rel="stylesheet" crossorigin href="/tenant/assets/index-ClIMMn0L.css">
+    <script type="module" crossorigin src="/tenant/assets/index-BpzhnaKm.js"></script>
+    <link rel="stylesheet" crossorigin href="/tenant/assets/index-C-djPHJ3.css">
   </head>
   <body>
     <div id="root"></div>

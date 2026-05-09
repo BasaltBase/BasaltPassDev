@@ -99,3 +99,64 @@ body {
     background: transparent;
   }
 }
+
+.dark :is(.user-console-shell, .tenant-console-shell, .admin-console-shell) {
+  color-scheme: dark;
+}
+
+.dark :is(.user-console-shell, .tenant-console-shell, .admin-console-shell) .bg-white {
+  background-color: rgb(17 24 39);
+}
+
+.dark :is(.user-console-shell, .tenant-console-shell, .admin-console-shell) .bg-gray-50,
+.dark :is(.user-console-shell, .tenant-console-shell, .admin-console-shell) .bg-gray-100 {
+  background-color: rgb(31 41 55);
+}
+
+.dark :is(.user-console-shell, .tenant-console-shell, .admin-console-shell) .bg-gray-600 {
+  background-color: rgb(0 0 0 / 0.72);
+}
+
+.dark :is(.user-console-shell, .tenant-console-shell, .admin-console-shell) .text-gray-900 {
+  color: rgb(249 250 251);
+}
+
+.dark :is(.user-console-shell, .tenant-console-shell, .admin-console-shell) .text-gray-700,
+.dark :is(.user-console-shell, .tenant-console-shell, .admin-console-shell) .text-gray-600 {
+  color: rgb(209 213 219);
+}
+
+.dark :is(.user-console-shell, .tenant-console-shell, .admin-console-shell) .text-gray-500,
+.dark :is(.user-console-shell, .tenant-console-shell, .admin-console-shell) .text-gray-400 {
+  color: rgb(156 163 175);
+}
+
+.dark :is(.user-console-shell, .tenant-console-shell, .admin-console-shell) .border-gray-300,
+.dark :is(.user-console-shell, .tenant-console-shell, .admin-console-shell) .border-gray-200 {
+  border-color: rgb(255 255 255 / 0.12);
+}
+
+.dark :is(.user-console-shell, .tenant-console-shell, .admin-console-shell) .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgb(255 255 255 / 0.1);
+}
+
+.dark :is(.user-console-shell, .tenant-console-shell, .admin-console-shell) .ring-black {
+  --tw-ring-color: rgb(255 255 255 / 0.12);
+}
+
+.dark :is(.user-console-shell, .tenant-console-shell, .admin-console-shell) .hover\:bg-gray-50:hover,
+.dark :is(.user-console-shell, .tenant-console-shell, .admin-console-shell) .hover\:bg-gray-100:hover {
+  background-color: rgb(255 255 255 / 0.08);
+}
+
+.dark :is(.user-console-shell, .tenant-console-shell, .admin-console-shell) .hover\:text-gray-900:hover,
+.dark :is(.user-console-shell, .tenant-console-shell, .admin-console-shell) .hover\:text-gray-700:hover {
+  color: rgb(249 250 251);
+}
+
+.dark :is(.user-console-shell, .tenant-console-shell, .admin-console-shell) .shadow-sm,
+.dark :is(.user-console-shell, .tenant-console-shell, .admin-console-shell) .shadow-md,
+.dark :is(.user-console-shell, .tenant-console-shell, .admin-console-shell) .shadow-lg {
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+}

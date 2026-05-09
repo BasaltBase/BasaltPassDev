@@ -1481,6 +1481,12 @@ const en = {
       settings: 'Settings',
       help: 'Help',
     },
+    theme: {
+      openMenu: '主题',
+      system: '跟随系统',
+      light: '亮色',
+      dark: '暗色',
+    },
     tenantManagement: 'Tenant Management',
     adminPanel: 'Admin Panel',
     switchToTenantTitle: 'Switch to Tenant Console (on-demand authorization)',

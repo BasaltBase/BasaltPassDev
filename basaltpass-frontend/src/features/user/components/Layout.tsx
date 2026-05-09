@@ -17,7 +17,10 @@ import {
   Squares2X2Icon,
   InformationCircleIcon,
   ChevronDownIcon,
-  ArrowRightOnRectangleIcon
+  ArrowRightOnRectangleIcon,
+  MoonIcon,
+  SunIcon,
+  ComputerDesktopIcon
 } from '@heroicons/react/24/outline'
 import { Modal, PButton } from '@ui'
 import { useAuth } from '@contexts/AuthContext'
@@ -33,9 +36,27 @@ interface LayoutProps {
   children: React.ReactNode
 }
 
+type UserThemePreference = 'light' | 'dark' | 'system'
+
+const USER_THEME_LEGACY_STORAGE_KEY = 'basaltpass:user-theme'
+const USER_THEME_STORAGE_KEY = 'basaltpass:user-theme-preference'
+
+const getBrowserTheme = (): 'light' | 'dark' => {
+  if (typeof window === 'undefined') return 'light'
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
+
 export default function Layout({ children }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
+  const [openThemeMenu, setOpenThemeMenu] = useState<string | null>(null)
+  const [themePreference, setThemePreference] = useState<UserThemePreference>(() => {
+    if (typeof window === 'undefined') return 'light'
+    const storedTheme = window.localStorage.getItem(USER_THEME_STORAGE_KEY)
+    if (storedTheme === 'light' || storedTheme === 'dark' || storedTheme === 'system') return storedTheme
+    return 'system'
+  })
+  const [browserTheme, setBrowserTheme] = useState<'light' | 'dark'>(getBrowserTheme)
   const [showAccountSwitcher, setShowAccountSwitcher] = useState(false)
   const [showTenantPerspectivePicker, setShowTenantPerspectivePicker] = useState(false)
   const [switchingTenantId, setSwitchingTenantId] = useState<number | null>(null)
@@ -45,6 +66,9 @@ export default function Layout({ children }: LayoutProps) {
   const { t } = useI18n()
   const { user, tenants, logout, switchAccount, switchTenantIdentity, canAccessTenant, canAccessAdmin, canUseWallet } = useAuth()
   const { marketEnabled, siteName, setPageTitle } = useConfig()
+  const theme = themePreference === 'system' ? browserTheme : themePreference
+  const isDarkTheme = theme === 'dark'
+  const themeMenuLabel = t('userLayout.theme.openMenu')
   const currentSessionKey = `${user?.id || 0}:${Number(user?.tenant_id || 0)}`
 
   const tenantDisplayName = (() => {
@@ -79,6 +103,39 @@ export default function Layout({ children }: LayoutProps) {
   useEffect(() => {
     setPageTitle(t('userLayout.pageTitle'))
   }, [setPageTitle, t])
+
+  useEffect(() => {
+    if (!window.localStorage.getItem(USER_THEME_STORAGE_KEY)) {
+      window.localStorage.removeItem(USER_THEME_LEGACY_STORAGE_KEY)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!openThemeMenu) return
+
+    const handlePointerDown = (event: MouseEvent) => {
+      const target = event.target as Element | null
+      if (target?.closest('[data-theme-menu-root]')) return
+      setOpenThemeMenu(null)
+    }
+
+    document.addEventListener('mousedown', handlePointerDown)
+    return () => document.removeEventListener('mousedown', handlePointerDown)
+  }, [openThemeMenu])
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', isDarkTheme)
+    document.documentElement.style.colorScheme = isDarkTheme ? 'dark' : 'light'
+  }, [isDarkTheme])
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const handleSystemThemeChange = () => setBrowserTheme(mediaQuery.matches ? 'dark' : 'light')
+
+    handleSystemThemeChange()
+    mediaQuery.addEventListener('change', handleSystemThemeChange)
+    return () => mediaQuery.removeEventListener('change', handleSystemThemeChange)
+  }, [])
 
   useEffect(() => {
     setSidebarOpen(false)
@@ -117,6 +174,74 @@ export default function Layout({ children }: LayoutProps) {
   const handleLogout = () => {
     logout()
   }
+
+  const selectThemePreference = (nextThemePreference: UserThemePreference) => {
+    setThemePreference(nextThemePreference)
+    window.localStorage.setItem(USER_THEME_STORAGE_KEY, nextThemePreference)
+    window.localStorage.removeItem(USER_THEME_LEGACY_STORAGE_KEY)
+    setOpenThemeMenu(null)
+  }
+
+  const themeOptions: Array<{
+    value: UserThemePreference
+    label: string
+    icon: typeof ComputerDesktopIcon
+  }> = [
+    { value: 'system', label: t('userLayout.theme.system'), icon: ComputerDesktopIcon },
+    { value: 'light', label: t('userLayout.theme.light'), icon: SunIcon },
+    { value: 'dark', label: t('userLayout.theme.dark'), icon: MoonIcon },
+  ]
+
+  const CurrentThemeIcon =
+    themePreference === 'system'
+      ? ComputerDesktopIcon
+      : themePreference === 'dark'
+        ? MoonIcon
+        : SunIcon
+
+  const renderThemeControl = (menuId: string, menuDirection: 'up' | 'down' = 'up') => (
+    <div className="relative" data-theme-menu-root>
+      <PButton
+        variant="ghost"
+        size="sm"
+        onClick={() => setOpenThemeMenu((currentMenu) => currentMenu === menuId ? null : menuId)}
+        className="h-11 w-11 rounded-lg p-0 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-white/10 dark:hover:text-white"
+        title={themeMenuLabel}
+        aria-label={themeMenuLabel}
+        aria-haspopup="menu"
+        aria-expanded={openThemeMenu === menuId}
+      >
+        <CurrentThemeIcon className="h-8 w-8 stroke-[2.4]" />
+      </PButton>
+
+      {openThemeMenu === menuId && (
+        <div className={`absolute right-0 z-50 w-40 overflow-hidden rounded-xl bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-gray-900 dark:ring-white/10 ${
+          menuDirection === 'up' ? 'bottom-full mb-2' : 'top-full mt-2'
+        }`}>
+          {themeOptions.map((option) => {
+            const OptionIcon = option.icon
+            const isSelected = themePreference === option.value
+
+            return (
+              <button
+                key={option.value}
+                type="button"
+                className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors ${
+                  isSelected
+                    ? 'bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-200'
+                    : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-white/10 dark:hover:text-white'
+                }`}
+                onClick={() => selectThemePreference(option.value)}
+              >
+                <OptionIcon className="h-5 w-5 stroke-[2.4]" />
+                <span>{option.label}</span>
+              </button>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
 
   const getUserInitial = () => {
     if (user?.nickname) return user.nickname.charAt(0).toUpperCase()
@@ -185,7 +310,7 @@ export default function Layout({ children }: LayoutProps) {
   }
 
   return (
-    <div className="h-screen flex overflow-hidden bg-gray-100">
+    <div className="user-console-shell h-screen flex overflow-hidden bg-gray-100 dark:bg-gray-950">
       {/*  */}
       {sidebarOpen && (
         <div className="fixed inset-0 !m-0 flex z-40 md:hidden">
@@ -323,7 +448,8 @@ export default function Layout({ children }: LayoutProps) {
                   )}
                 </div>
 
-                <div className="relative ml-3 flex-shrink-0">
+                <div className="relative ml-3 flex flex-shrink-0 items-center gap-2">
+                  {renderThemeControl('mobile-sidebar')}
                   <EnhancedNotificationIcon
                     viewAllPath={ROUTES.user.notifications}
                     dropdownDirection="up"
@@ -462,7 +588,8 @@ export default function Layout({ children }: LayoutProps) {
                   )}
                 </div>
 
-                <div className="relative ml-3 flex-shrink-0">
+                <div className="relative ml-3 flex flex-shrink-0 items-center gap-2">
+                  {renderThemeControl('desktop')}
                   <EnhancedNotificationIcon
                     viewAllPath={ROUTES.user.notifications}
                     dropdownDirection="up"
@@ -489,6 +616,9 @@ export default function Layout({ children }: LayoutProps) {
             >
               <Bars3Icon className="h-6 w-6" />
             </PButton>
+            <div className="ml-2">
+              {renderThemeControl('mobile-top', 'down')}
+            </div>
           </div>
         </div>
         

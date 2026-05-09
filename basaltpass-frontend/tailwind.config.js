@@ -57,6 +57,7 @@ const neutralScale = {
 
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     path.join(__dirname, 'index.html'),
     path.join(__dirname, 'apps/*/index.html'),
