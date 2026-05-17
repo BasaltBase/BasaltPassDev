@@ -105,6 +105,8 @@ Important variables:
 For production, always use a strong secret and an external managed database.
 
 ## OAuth / OIDC Endpoints (Typical)
+> OIDC改造路线图见 `OIDC_REMEDIATION_PLAN.md`（用于从当前实现升级到更完整 OIDC Core 兼容）。
+
 
 With base URL `https://auth.example.com/api/v1`:
 

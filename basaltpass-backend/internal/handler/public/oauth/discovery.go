@@ -67,8 +67,6 @@ func DiscoveryHandler(c *fiber.Ctx) error {
 		},
 		ResponseTypesSupported: []string{
 			"code",
-			"id_token",
-			"code id_token",
 		},
 		ResponseModesSupported: []string{
 			"query",
@@ -88,7 +86,6 @@ func DiscoveryHandler(c *fiber.Ctx) error {
 			"public",
 		},
 		IDTokenSigningAlgValuesSupported: []string{
-			"HS256",
 			"RS256",
 		},
 		ClaimsSupported: []string{

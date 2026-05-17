@@ -65,6 +65,7 @@ type OAuthAuthorizationCode struct {
 	Scopes              string    `gorm:"type:text" json:"scopes"`
 	CodeChallenge       string    `gorm:"size:128" json:"code_challenge"`       // PKCE支持
 	CodeChallengeMethod string    `gorm:"size:16" json:"code_challenge_method"` // PKCE方法
+	Nonce               string    `gorm:"size:255" json:"nonce"`                // OIDC nonce
 	ExpiresAt           time.Time `gorm:"not null;index" json:"expires_at"`
 	Used                bool      `gorm:"default:false;index" json:"used"` // 是否已使用
 	CreatedAt           time.Time `json:"created_at"`
