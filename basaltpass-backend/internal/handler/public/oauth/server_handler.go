@@ -31,6 +31,7 @@ func AuthorizeHandler(c *fiber.Ctx) error {
 		State:               c.Query("state"),
 		CodeChallenge:       c.Query("code_challenge"),
 		CodeChallengeMethod: c.Query("code_challenge_method"),
+		Nonce:               c.Query("nonce"),
 	}
 
 	// 验证授权请求
@@ -176,6 +177,9 @@ func buildConsentURL(req *AuthorizeRequest, client *model.OAuthClient, decision 
 	if req.CodeChallengeMethod != "" {
 		q.Set("code_challenge_method", req.CodeChallengeMethod)
 	}
+	if req.Nonce != "" {
+		q.Set("nonce", req.Nonce)
+	}
 	if client != nil {
 		appTenantID := oauthServerService.resolveClientTenantID(client)
 		if appTenantID > 0 {
@@ -235,6 +239,7 @@ func ConsentHandler(c *fiber.Ctx) error {
 	scope := c.FormValue("scope")
 	codeChallenge := c.FormValue("code_challenge")
 	codeChallengeMethod := c.FormValue("code_challenge_method")
+	nonce := c.FormValue("nonce")
 	selectedAccessToken := strings.TrimSpace(c.FormValue("selected_access_token"))
 	joinTenant := strings.EqualFold(strings.TrimSpace(c.FormValue("join_tenant")), "true") || c.FormValue("join_tenant") == "1"
 	action := c.FormValue("action") // "allow" 或 "deny"
@@ -264,6 +269,7 @@ func ConsentHandler(c *fiber.Ctx) error {
 		State:               state,
 		CodeChallenge:       codeChallenge,
 		CodeChallengeMethod: codeChallengeMethod,
+		Nonce:               nonce,
 	}
 
 	// 验证请求

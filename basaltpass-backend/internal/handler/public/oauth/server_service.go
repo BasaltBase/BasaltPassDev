@@ -9,12 +9,15 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 
 	"basaltpass-backend/internal/common"
+	"basaltpass-backend/internal/config"
 	"basaltpass-backend/internal/model"
 
+	"github.com/golang-jwt/jwt/v5"
 	"gorm.io/gorm"
 )
 
@@ -46,6 +49,7 @@ type AuthorizeRequest struct {
 	State               string `form:"state"`
 	CodeChallenge       string `form:"code_challenge"`        // PKCE
 	CodeChallengeMethod string `form:"code_challenge_method"` // PKCE
+	Nonce               string `form:"nonce"`                 // OIDC
 }
 
 // TokenRequest 令牌请求结构
@@ -64,6 +68,7 @@ type TokenResponse struct {
 	ExpiresIn    int    `json:"expires_in"`
 	RefreshToken string `json:"refresh_token,omitempty"`
 	Scope        string `json:"scope,omitempty"`
+	IDToken      string `json:"id_token,omitempty"`
 }
 
 // AuthorizeResponse 授权响应结构
@@ -98,6 +103,10 @@ func (s *OAuthServerService) ValidateAuthorizeRequest(req *AuthorizeRequest) (*m
 
 	// 4. 验证scope（可选）
 	if req.Scope != "" {
+		if hasScope(req.Scope, "openid") && strings.TrimSpace(req.Nonce) == "" {
+			return nil, errors.New("invalid_request")
+		}
+
 		requestedScopes := strings.Split(req.Scope, " ")
 		allowedScopes := client.GetScopeList()
 
@@ -235,6 +244,38 @@ func (s *OAuthServerService) HasAppUserAuthorization(appID, userID uint) (bool, 
 	return count > 0, nil
 }
 
+func hasScope(scopeText string, target string) bool {
+	for _, s := range strings.Fields(scopeText) {
+		if s == target {
+			return true
+		}
+	}
+	return false
+}
+
+func (s *OAuthServerService) buildIDToken(clientID string, userID uint, nonce string, issuedAt time.Time) (string, error) {
+	privateKey, err := GetPrivateKey()
+	if err != nil {
+		return "", err
+	}
+
+	claims := jwt.MapClaims{
+		"iss":       config.Get().Server.Address + "/api/v1",
+		"sub":       strconv.FormatUint(uint64(userID), 10),
+		"aud":       clientID,
+		"exp":       issuedAt.Add(time.Hour).Unix(),
+		"iat":       issuedAt.Unix(),
+		"auth_time": issuedAt.Unix(),
+	}
+	if nonce != "" {
+		claims["nonce"] = nonce
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
+	token.Header["kid"] = GetKeyID()
+	return token.SignedString(privateKey)
+}
+
 // ExchangeCodeForToken 用授权码换取访问令牌
 func (s *OAuthServerService) ExchangeCodeForToken(req *TokenRequest, clientID string, clientSecret string) (*TokenResponse, error) {
 	// 1. 验证grant_type
@@ -364,13 +405,22 @@ func (s *OAuthServerService) ExchangeCodeForToken(req *TokenRequest, clientID st
 	now := time.Now()
 	s.db.Model(&client).Update("last_used_at", &now)
 
-	return &TokenResponse{
+	issuedAt := time.Now()
+	resp := &TokenResponse{
 		AccessToken:  accessToken,
 		TokenType:    "Bearer",
 		ExpiresIn:    3600, // 1小时
 		RefreshToken: refreshToken,
 		Scope:        authCode.Scopes,
-	}, nil
+	}
+	if hasScope(authCode.Scopes, "openid") {
+		idToken, err := s.buildIDToken(authCode.ClientID, authCode.UserID, authCode.Nonce, issuedAt)
+		if err != nil {
+			return nil, err
+		}
+		resp.IDToken = idToken
+	}
+	return resp, nil
 }
 
 // RefreshAccessToken 刷新访问令牌
